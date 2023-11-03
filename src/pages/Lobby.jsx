@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketProvider";
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
 
 export const LobbyScreen = () => {
   const [email, setEmail] = useState("");
@@ -35,7 +37,7 @@ export const LobbyScreen = () => {
   }, [socket, handleJoinRoom]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-950">
+    <div className="flex flex-col items-center justify-center w-full h-screen">
       <h1 className="text-6xl text-green-200 mb-10 font-bold">
         SALA DE ESPERA
       </h1>
@@ -44,8 +46,7 @@ export const LobbyScreen = () => {
         className="flex flex-col justify-center items-center border rounded-lg border-green-100 p-10 lg:w-1/2 gap-7"
         onSubmit={handleSubmitForm}
       >
-        <input
-          className="text-green-950 lg:text-2xl rounded-lg border-8 border-green-100 w-full text-center"
+        <Input
           placeholder="Digite seu email"
           type="email"
           id="email"
@@ -53,8 +54,7 @@ export const LobbyScreen = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <input
-          className="text-green-950 lg:text-2xl rounded-lg border-8 border-green-100 w-full text-center"
+        <Input
           placeholder="Digite o nome da sala"
           type="text"
           id="room"
@@ -62,12 +62,9 @@ export const LobbyScreen = () => {
           onChange={(e) => setRoom(e.target.value)}
         />
 
-        <button
-          className="text-green-950 bg-green-200 w-1/2 rounded-xl h-15 lg:text-3xl font-bold mt-5"
-          type="submit"
-        >
+        <Button className="mt-5 w-1/2 h-15 lg:text-3xl" type="submit">
           Entrar
-        </button>
+        </Button>
       </form>
     </div>
   );

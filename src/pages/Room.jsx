@@ -3,6 +3,7 @@ import ReactPlayer from "react-player";
 import peerService from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
 import { useParams } from "react-router-dom";
+import { Button } from "../components/Button";
 
 export const RoomPage = () => {
   const socket = useSocket();
@@ -10,6 +11,10 @@ export const RoomPage = () => {
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
   const { roomId } = useParams();
+  const [screenWidth, setScreenWidth] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   const handleUserJoined = useCallback(({ id }) => {
     setRemoteSocketId(id);
@@ -131,37 +136,72 @@ export const RoomPage = () => {
     handleNegoNeedFinal,
   ]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div>
-      <h1>{`Room Page | ${roomId}`}</h1>
+    <div className="flex flex-col md:flex-row">
+      <aside className="bg-green-800 max-md:h-24 max-md:justify-around max-md:items-center max-md:bottom-0 max-md:w-screen w-64 md:h-screen px-3 max-md:fixed flex md:flex-col max-md:order-2">
+        <h1 className="text-xl text-green-200 max-md:order-2 mb-5 font-bold mt-5">{`Sala | ${roomId}`}</h1>
 
-      <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
-
-      {myStream && <button onClick={sendStreams}>Enviar transmissão</button>}
-
-      {remoteSocketId && <button onClick={handleCallUser}>Chamar</button>}
-
-      {myStream && (
-        <>
-          <h1>Minha transmissão</h1>
-
-          <ReactPlayer playing muted height="10%" width="10%" url={myStream} />
-        </>
-      )}
-
-      {remoteStream && (
-        <>
-          <h1>Transmissão remota</h1>
-
+        {myStream && (
           <ReactPlayer
+            className="max-md:order-1"
+            width={screenWidth.width < 768 ? "100px" : "100%"}
+            height={screenWidth.width < 768 ? "100px" : "200px"}
+            playing
+            muted
+            url={myStream}
+          />
+        )}
+
+        <h4 className="text-lg text-green-200">
+          {remoteSocketId ? "Conectado" : "Aguardando uma conexão..."}
+        </h4>
+
+        <div className="flex flex-col gap-5 max-md:order-4">
+          {myStream && (
+            <Button
+              className="md:mt-5 text-xl max-md:text-xs max-md:w-20"
+              onClick={sendStreams}
+            >
+              Enviar transmissão
+            </Button>
+          )}
+
+          {remoteSocketId && (
+            <Button
+              className="text-xl max-md:text-xs max-md:w-20"
+              onClick={handleCallUser}
+            >
+              Chamar
+            </Button>
+          )}
+        </div>
+      </aside>
+      <section className="w-full max-md:order-1 max-md:h-100">
+        {remoteStream && (
+          <ReactPlayer
+            width={screenWidth.width < 768 ? "100vw" : "100%"}
+            height={screenWidth.width < 768 ? screenWidth.height - 96 : "100vh"}
             playing
             controls
-            height="500px"
-            width="500px"
             url={remoteStream}
           />
-        </>
-      )}
+        )}
+      </section>
     </div>
   );
 };
