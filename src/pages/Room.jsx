@@ -72,8 +72,9 @@ export const RoomPage = () => {
 
   const handleExit = () => {
     socket.emit("user:exit", { to: remoteSocketId });
+    myStream?.getTracks().forEach((track) => track.stop());
 
-    navigate("/");
+    navigate("/", { state: { userExit: true } });
   };
 
   const handleNegoNeeded = useCallback(async () => {
