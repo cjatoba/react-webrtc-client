@@ -110,6 +110,8 @@ export const RoomPage = () => {
   }, []);
 
   const handleExitRoom = useCallback(() => {
+    myStream?.getTracks().forEach((track) => track.stop());
+
     setShowToast({
       type: "warning",
       message: "A chamada foi encerrada",
@@ -118,7 +120,7 @@ export const RoomPage = () => {
     setTimeout(() => {
       navigate("/");
     }, 4000);
-  }, [navigate]);
+  }, [myStream, navigate]);
 
   const handleTrackEvent = useCallback(async (ev) => {
     const remoteStream = ev.streams;
@@ -177,9 +179,6 @@ export const RoomPage = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      {showToast && (
-        <Toast type={"warning"} message={"A chamada foi encerrada"} />
-      )}
       <aside className="bg-green-800 max-md:h-24 max-md:justify-around items-center max-md:bottom-0 max-md:w-screen w-64 md:h-screen px-3 max-md:fixed flex md:flex-col max-md:order-2">
         <h1 className="text-xl text-green-200 max-md:order-2 mb-5 font-bold mt-5">{`Sala | ${roomId}`}</h1>
 
@@ -226,7 +225,10 @@ export const RoomPage = () => {
           />
         </div>
       </aside>
-      <section className="w-full max-md:order-1 max-md:h-100">
+      <section className="w-full max-md:order-1 max-md:h-100 flex flex-col items-center">
+        {showToast && (
+          <Toast type={"warning"} message={"A chamada foi encerrada"} />
+        )}
         {remoteStream && (
           <ReactPlayer
             width={screenWidth.width < 768 ? "100vw" : "100%"}
