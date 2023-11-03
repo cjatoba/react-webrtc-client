@@ -137,35 +137,27 @@ export const RoomPage = () => {
 
       <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
 
-      {myStream && <button onClick={sendStreams}>Send Stream</button>}
+      {myStream && <button onClick={sendStreams}>Enviar transmissão</button>}
 
-      {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
+      {remoteSocketId && <button onClick={handleCallUser}>Chamar</button>}
 
       {myStream && (
         <>
-          <h1>My Stream</h1>
+          <h1>Minha transmissão</h1>
 
-          <ReactPlayer
-            playing
-            muted
-            controls
-            height="100px"
-            width="200px"
-            url={myStream}
-          />
+          <ReactPlayer playing muted height="10%" width="10%" url={myStream} />
         </>
       )}
 
       {remoteStream && (
         <>
-          <h1>Remote Stream</h1>
+          <h1>Transmissão remota</h1>
 
           <ReactPlayer
             playing
-            muted
             controls
-            height="100px"
-            width="200px"
+            height="500px"
+            width="500px"
             url={remoteStream}
           />
         </>

@@ -35,33 +35,37 @@ export const LobbyScreen = () => {
   }, [socket, handleJoinRoom]);
 
   return (
-    <div>
-      <h1>Lobby</h1>
+    <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-950">
+      <h1 className="text-6xl text-green-200 mb-10">SALA DE ESPERA</h1>
 
-      <form onSubmit={handleSubmitForm}>
-        <label htmlFor="email">Email ID</label>
-
+      <form
+        className="flex flex-col justify-center items-center border rounded-lg border-green-100 p-10 lg:w-1/2 gap-7"
+        onSubmit={handleSubmitForm}
+      >
         <input
+          className="text-green-950 rounded-lg border-8 border-green-100 w-full text-center"
+          placeholder="Digite seu email"
           type="email"
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <br />
-
-        <label htmlFor="room">Room Number</label>
-
         <input
+          className="text-green-950 rounded-lg border-8 border-green-100 w-full text-center"
+          placeholder="Digite o nome da sala"
           type="text"
           id="room"
           value={room}
           onChange={(e) => setRoom(e.target.value)}
         />
 
-        <br />
-
-        <button>Join</button>
+        <button
+          className="text-green-950 bg-green-200 w-1/2 rounded-xl h-10"
+          type="submit"
+        >
+          Join
+        </button>
       </form>
     </div>
   );
