@@ -4,6 +4,7 @@ import peerService from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Toast } from "../components/Toast";
 
 export const RoomPage = () => {
   const socket = useSocket();
@@ -15,6 +16,7 @@ export const RoomPage = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
 
   const handleUserJoined = useCallback(({ id }) => {
@@ -108,7 +110,14 @@ export const RoomPage = () => {
   }, []);
 
   const handleExitRoom = useCallback(() => {
-    navigate("/");
+    setShowToast({
+      type: "warning",
+      message: "A chamada foi encerrada",
+    });
+
+    setTimeout(() => {
+      navigate("/");
+    }, 4000);
   }, [navigate]);
 
   const handleTrackEvent = useCallback(async (ev) => {
@@ -168,6 +177,9 @@ export const RoomPage = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
+      {showToast && (
+        <Toast type={"warning"} message={"A chamada foi encerrada"} />
+      )}
       <aside className="bg-green-800 max-md:h-24 max-md:justify-around items-center max-md:bottom-0 max-md:w-screen w-64 md:h-screen px-3 max-md:fixed flex md:flex-col max-md:order-2">
         <h1 className="text-xl text-green-200 max-md:order-2 mb-5 font-bold mt-5">{`Sala | ${roomId}`}</h1>
 

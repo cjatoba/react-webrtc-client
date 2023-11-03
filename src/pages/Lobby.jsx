@@ -1,22 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketProvider";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
-import { Toast } from "../components/Toast";
 
 export const LobbyScreen = () => {
   const [email, setEmail] = useState("");
   const [room, setRoom] = useState("");
-  const location = useLocation();
-  const [showToast, setShowToast] = useState(false);
-
-  if (location.state?.userExit) {
-    setShowToast({
-      type: "warning",
-      message: "A chamada foi encerrada",
-    });
-  }
 
   const socket = useSocket();
   const navigate = useNavigate();
@@ -48,9 +38,6 @@ export const LobbyScreen = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
-      {showToast && (
-        <Toast type={"warning"} message={"A chamada foi encerrada"} />
-      )}
       <h1 className="text-6xl text-green-200 mb-10 font-bold">
         SALA DE ESPERA
       </h1>
