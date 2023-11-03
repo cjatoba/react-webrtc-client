@@ -6,6 +6,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { SocketProvider } from "./context/SocketProvider";
 import "typeface-roboto";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
+library.add(fas);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

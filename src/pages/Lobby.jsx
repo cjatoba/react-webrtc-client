@@ -52,6 +52,7 @@ export const LobbyScreen = () => {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoFocus
         />
 
         <Input

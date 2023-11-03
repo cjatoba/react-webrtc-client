@@ -2,8 +2,8 @@ import { useEffect, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import peerService from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
-import { useParams } from "react-router-dom";
-import { Button } from "../components/Button";
+import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const RoomPage = () => {
   const socket = useSocket();
@@ -15,6 +15,7 @@ export const RoomPage = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const navigate = useNavigate();
 
   const handleUserJoined = useCallback(({ id }) => {
     setRemoteSocketId(id);
@@ -69,6 +70,12 @@ export const RoomPage = () => {
     [sendStreams],
   );
 
+  const handleExit = () => {
+    socket.emit("user:exit", { to: remoteSocketId });
+
+    navigate("/");
+  };
+
   const handleNegoNeeded = useCallback(async () => {
     const offer = await peerService.getOffer();
 
@@ -99,6 +106,10 @@ export const RoomPage = () => {
     await peerService.setLocalDescription(ans);
   }, []);
 
+  const handleExitRoom = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
+
   const handleTrackEvent = useCallback(async (ev) => {
     const remoteStream = ev.streams;
 
@@ -119,6 +130,7 @@ export const RoomPage = () => {
     socket.on("call:accepted", handleCallAccepted);
     socket.on("peer:nego:needed", handleNegoNeedIncoming);
     socket.on("peer:nego:final", handleNegoNeedFinal);
+    socket.on("user:exit", handleExitRoom);
 
     return () => {
       socket.off("user:joined", handleUserJoined);
@@ -126,6 +138,7 @@ export const RoomPage = () => {
       socket.off("call:accepted", handleCallAccepted);
       socket.off("peer:nego:needed", handleNegoNeedIncoming);
       socket.off("peer:nego:final", handleNegoNeedFinal);
+      socket.off("user:exit", handleExitRoom);
     };
   }, [
     socket,
@@ -134,6 +147,7 @@ export const RoomPage = () => {
     handleCallAccepted,
     handleNegoNeedIncoming,
     handleNegoNeedFinal,
+    handleExitRoom,
   ]);
 
   useEffect(() => {
@@ -153,13 +167,13 @@ export const RoomPage = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <aside className="bg-green-800 max-md:h-24 max-md:justify-around max-md:items-center max-md:bottom-0 max-md:w-screen w-64 md:h-screen px-3 max-md:fixed flex md:flex-col max-md:order-2">
+      <aside className="bg-green-800 max-md:h-24 max-md:justify-around items-center max-md:bottom-0 max-md:w-screen w-64 md:h-screen px-3 max-md:fixed flex md:flex-col max-md:order-2">
         <h1 className="text-xl text-green-200 max-md:order-2 mb-5 font-bold mt-5">{`Sala | ${roomId}`}</h1>
 
         {myStream && (
           <ReactPlayer
             className="max-md:order-1"
-            width={screenWidth.width < 768 ? "100px" : "100%"}
+            width={screenWidth.width < 768 ? "" : "100%"}
             height={screenWidth.width < 768 ? "100px" : "200px"}
             playing
             muted
@@ -171,24 +185,32 @@ export const RoomPage = () => {
           {remoteSocketId ? "Conectado" : "Aguardando uma conexão..."}
         </h4>
 
-        <div className="flex flex-col gap-5 max-md:order-4">
+        <div className="flex flex-row gap-5 max-md:order-4 md:mt-5">
           {myStream && (
-            <Button
-              className="md:mt-5 text-xl max-md:text-xs max-md:w-20"
+            <FontAwesomeIcon
+              className="text-blue-400 w-8 h-8"
+              icon={["fas", "video"]}
               onClick={sendStreams}
             >
               Enviar transmissão
-            </Button>
+            </FontAwesomeIcon>
           )}
 
           {remoteSocketId && (
-            <Button
-              className="text-xl max-md:text-xs max-md:w-20"
+            <FontAwesomeIcon
+              className="text-green-400 w-8 h-8"
+              icon={["fas", "phone"]}
               onClick={handleCallUser}
             >
               Chamar
-            </Button>
+            </FontAwesomeIcon>
           )}
+
+          <FontAwesomeIcon
+            className="text-red-400 w-8 h-8"
+            icon={["fas", "sign-out-alt"]}
+            onClick={handleExit}
+          />
         </div>
       </aside>
       <section className="w-full max-md:order-1 max-md:h-100">
