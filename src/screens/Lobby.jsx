@@ -36,14 +36,16 @@ export const LobbyScreen = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-950">
-      <h1 className="text-6xl text-green-200 mb-10">SALA DE ESPERA</h1>
+      <h1 className="text-6xl text-green-200 mb-10 font-bold">
+        SALA DE ESPERA
+      </h1>
 
       <form
         className="flex flex-col justify-center items-center border rounded-lg border-green-100 p-10 lg:w-1/2 gap-7"
         onSubmit={handleSubmitForm}
       >
         <input
-          className="text-green-950 rounded-lg border-8 border-green-100 w-full text-center"
+          className="text-green-950 lg:text-2xl rounded-lg border-8 border-green-100 w-full text-center"
           placeholder="Digite seu email"
           type="email"
           id="email"
@@ -52,7 +54,7 @@ export const LobbyScreen = () => {
         />
 
         <input
-          className="text-green-950 rounded-lg border-8 border-green-100 w-full text-center"
+          className="text-green-950 lg:text-2xl rounded-lg border-8 border-green-100 w-full text-center"
           placeholder="Digite o nome da sala"
           type="text"
           id="room"
@@ -61,10 +63,10 @@ export const LobbyScreen = () => {
         />
 
         <button
-          className="text-green-950 bg-green-200 w-1/2 rounded-xl h-10"
+          className="text-green-950 bg-green-200 w-1/2 rounded-xl h-15 lg:text-3xl font-bold mt-5"
           type="submit"
         >
-          Join
+          Entrar
         </button>
       </form>
     </div>
