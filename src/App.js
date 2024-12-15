@@ -5,7 +5,7 @@ import { RoomPage } from "./pages/Room";
 
 function App() {
   return (
-    <div className="App font-roboto bg-gray-950 w-screen h-screen">
+    <div className="text-center font-roboto bg-gray-950 w-screen h-screen">
       <Routes>
         <Route path="/" element={<LobbyScreen />} />
         <Route path="/room/:roomId" element={<RoomPage />} />
